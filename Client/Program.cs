@@ -16,6 +16,7 @@ builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().Cre
 
 builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
 builder.Services.AddScoped <IProductService,ProductService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 builder.Services.AddApiAuthorization();
 
