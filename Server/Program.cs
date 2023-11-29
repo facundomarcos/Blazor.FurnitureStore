@@ -3,6 +3,10 @@ using Blazor.FurnitureStore.Server.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using System.Data;
+using Microsoft.Data.SqlClient;
+using Blazor.FurnitureStore.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +24,10 @@ builder.Services.AddIdentityServer()
 
 builder.Services.AddAuthentication()
     .AddIdentityServerJwt();
+
+builder.Services.AddSingleton<IDbConnection>((sp) => new SqlConnection(connectionString));
+
+builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();

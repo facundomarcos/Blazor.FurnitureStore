@@ -1,0 +1,43 @@
+﻿@page "/orderDetails"
+
+@inject IProductCategoryService ProductCategoryService
+
+<h3>OrderDetails</h3>
+<p>@Message</p>
+@if(productCategories != null && Order != null)
+{
+    <EditForm Model="@Order">
+        <InputSelect class="form-control col-sm-5" @bind-Value="@Order.ProductCategoryId">
+            @foreach (var item in productCategories)
+        {
+            <option value="@item.Id">@item.Name</option>
+        }
+        </InputSelect>
+    </EditForm>
+}
+else
+{
+    <p>Loading...</p>
+}
+
+@code {
+    public Order Order;
+
+    public IEnumerable<ProductCategory> productCategories;
+    public string Message { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Order = new Order();
+            productCategories = await ProductCategoryService.GetProductCategories();
+        }
+        catch (Exception e)
+        {
+
+            Message = "There was an error..." + e.Message;
+        }
+       
+    }
+}

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.FurnitureStore.Clien
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.FurnitureStore.Shared", "Shared\Blazor.FurnitureStore.Shared.csproj", "{414CAB76-D295-4BFE-B748-FD0AC9CA3BC9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.FurnitureStore.Repositories", "..\Blazor.FurnitureStore.Repositories\Blazor.FurnitureStore.Repositories.csproj", "{AC044456-9B86-4BDC-AF03-1EE9C20F7E82}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{414CAB76-D295-4BFE-B748-FD0AC9CA3BC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{414CAB76-D295-4BFE-B748-FD0AC9CA3BC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{414CAB76-D295-4BFE-B748-FD0AC9CA3BC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC044456-9B86-4BDC-AF03-1EE9C20F7E82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC044456-9B86-4BDC-AF03-1EE9C20F7E82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC044456-9B86-4BDC-AF03-1EE9C20F7E82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC044456-9B86-4BDC-AF03-1EE9C20F7E82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
