@@ -79,7 +79,14 @@
         try
         {
             productCategories = await ProductCategoryService.GetProductCategories();
-            await LoadProducts(Product.ProductCategoryId);
+            //trae los valores por defecto
+            if(productCategories != null && productCategories.Any())
+            {
+                Product.ProductCategoryId = productCategories.FirstOrDefault().Id;
+                await LoadProducts(Product.ProductCategoryId);
+            }
+
+            
         }
         catch (Exception e)
         {
@@ -110,6 +117,7 @@
     private async Task LoadProducts(int productCategoryId)
     {
         products = await ProductService.GetByCategory(productCategoryId);
+        //valores por defecto
         if(products != null && products.Any())
         {
             Product = await ProductService.GetDetails(products.FirstOrDefault().Id);
@@ -123,7 +131,9 @@
 
     private void AddProduct()
     {
+        //notificacion mudblazor
         Snackbar.Add("Product added", Severity.Success, a => a.VisibleStateDuration = 200);
+
         MudDialog.Close(DialogResult.Ok(Product));
     }
 }

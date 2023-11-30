@@ -36,5 +36,11 @@ namespace Blazor.FurnitureStore.Server.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("GetNextNumber")]
+        public async Task<int> GetNextNumber()
+        {
+            return await _orderRepository.GetNextNumber();
+        }
     }
 }

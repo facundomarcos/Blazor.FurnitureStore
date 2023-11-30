@@ -63,8 +63,8 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="">Total</label>
-                            <InputNumber class="form-control" @bind-Value="@Order.Total" />
-
+                           
+                            <input type="text" class="form-control" readonly="readonly" value="@Order.Total.ToString("C")" />
                         </div>
                     </div>
 
@@ -125,6 +125,7 @@ else
         try
         {
             Order = new Order() {
+                    OrderNumber = await OrderService.GetNextNumber(),
                     ProductCategoryId = 1,
                     OrderDate = DateTime.Today,
                     DeliveryDate = DateTime.Today.AddDays(7)

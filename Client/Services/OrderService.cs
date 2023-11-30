@@ -25,5 +25,10 @@ namespace Blazor.FurnitureStore.Client.Services
                 //Invoke Update
             }
         }
+
+        public async Task<int> GetNextNumber()
+        {
+            return await _httpClient.GetFromJsonAsync<int>($"api/order/getnextnumber/");
+        }
     }
 }
