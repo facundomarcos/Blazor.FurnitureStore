@@ -1,6 +1,6 @@
 ﻿@inject IProductCategoryService ProductCategoryService
 @inject IProductService ProductService
-
+@inject ISnackbar Snackbar
 
 <MudDialog>
     <TitleContent>Product Details</TitleContent>
@@ -25,7 +25,11 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="">Product</label>
-                                <InputSelect class="form-control" @bind-Value="@Product.Id">
+                                <InputSelect class="form-control" 
+                                    Value="@Product.Id"
+                                    ValueChanged="@((int productId) => ProductHasChanged(productId))"
+                                    ValueExpression="@(() => Product.Id)"
+                                    >
                                     @foreach (var item in products)
                                     {
                                         <option value="@item.Id">@item.Name</option>
@@ -94,9 +98,22 @@
         }
 
     }
+
+    protected async Task ProductHasChanged(int productId)
+    {
+        if(productId > 0)
+        {
+            Product = await ProductService.GetDetails(productId);
+        }
+    }
+
     private async Task LoadProducts(int productCategoryId)
     {
         products = await ProductService.GetByCategory(productCategoryId);
+        if(products != null && products.Any())
+        {
+            Product = await ProductService.GetDetails(products.FirstOrDefault().Id);
+        }
     }
 
     private void Cancel()
@@ -106,6 +123,7 @@
 
     private void AddProduct()
     {
+        Snackbar.Add("Product added", Severity.Success, a => a.VisibleStateDuration = 200);
         MudDialog.Close(DialogResult.Ok(Product));
     }
 }
