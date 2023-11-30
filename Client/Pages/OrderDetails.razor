@@ -2,12 +2,73 @@
 
 @inject IProductCategoryService ProductCategoryService
 @inject IProductService ProductService
+@inject IClientService ClientService
 
-<h3>OrderDetails</h3>
+
 <p>@Message</p>
 @if(productCategories != null && Order != null)
 {
     <EditForm Model="@Order">
+        <div class="card">
+            <h5 class="card-header">Order Details</h5>
+            <div class="card-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <input type="submit" class="btn btn-success" value="Save">
+                            <input type="button" class="btn btn-secondary" value="Cancel">
+                            
+                        </div>
+                        <div class="col-md-4 mb-3">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="">Number</label>
+                            <InputNumber class="form-control" @bind-Value="@Order.OrderNumber"/>
+
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="">Order Date</label>
+                            <InputDate class="form-control" @bind-Value="@Order.OrderDate" />
+
+                        </div>
+                    </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="">Client</label>
+                                <InputSelect class="form-control" @bind-Value="@Order.ClientId">
+                                    @foreach (var item in clients)
+                                        {
+                                            <option value="@item.Id">@(item.LastName + ", " + item.FirstName)</option>
+                                        }
+                                </InputSelect> 
+
+                            </div>
+                        </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="">Delivery Date</label>
+                            <InputDate class="form-control" @bind-Value="@Order.DeliveryDate" />
+
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="">Total</label>
+                            <InputNumber class="form-control" @bind-Value="@Order.Total" />
+
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+      
+
         <div class="col-sm-5">
             <label>Categories</label>
             <InputSelect class="form-control" 
@@ -41,6 +102,7 @@ else
 
     public IEnumerable<ProductCategory> productCategories;
     public IEnumerable<Product> products;
+    public IEnumerable<Client> clients;
 
     public string Message { get; set; }
     public int productId   { get; set; } 
@@ -49,9 +111,16 @@ else
     {
         try
         {
-            Order = new Order() {ProductCategoryId = 1};
+            Order = new Order() {
+                    ProductCategoryId = 1,
+                    OrderDate = DateTime.Today,
+                    DeliveryDate = DateTime.Today.AddDays(7)
+
+            };
             productCategories = await ProductCategoryService.GetProductCategories();
             await LoadProducts(Order.ProductCategoryId);
+
+            clients = await ClientService.GetAll();
         }
         catch (Exception e)
         {
