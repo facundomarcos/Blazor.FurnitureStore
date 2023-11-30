@@ -1,10 +1,12 @@
 ﻿@page "/orderDetails"
 
+
 @inject IProductCategoryService ProductCategoryService
 @inject IProductService ProductService
 @inject IClientService ClientService
 @inject IOrderService OrderService
 @inject NavigationManager NavigationManager
+@attribute [Authorize]
 
 <p>@Message</p>
 @if(productCategories != null && Order != null)
