@@ -1,0 +1,111 @@
+﻿@inject IProductCategoryService ProductCategoryService
+@inject IProductService ProductService
+
+
+<MudDialog>
+    <TitleContent>Product Details</TitleContent>
+    <DialogContent>
+        <EditForm Model="@Product">
+            <div class="card">
+                <div class="card-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="">Category</label>
+                                    <InputSelect class="form-control"
+                                                 Value="@Product.ProductCategoryId"
+                                                 ValueChanged="@((int productCategoryId) => ProductCategoryHasChanged(productCategoryId))"
+                                                 ValueExpression="@(()=> Product.ProductCategoryId)">
+                                        @foreach (var item in productCategories)
+                                        {
+                                            <option value="@item.Id">@item.Name</option>
+                                        }
+                                    </InputSelect>
+
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="">Product</label>
+                                <InputSelect class="form-control" @bind-Value="@Product.Id">
+                                    @foreach (var item in products)
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                </InputSelect>
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                              
+                                <MudNumericField Disabled="true" Label="Price" @bind-Value="@Product.Price" Variant="Variant.Outlined" />
+
+                            </div>
+                            <div class="col-md-6 mb-3">
+                             
+                                <MudNumericField Label="Quantity" @bind-Value="@Product.Quantity" Variant="Variant.Outlined"/>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </EditForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="AddProduct">Add</MudButton>
+    </DialogActions>
+
+</MudDialog>
+@code {
+
+    public Product Product = new Product();
+    public string Message { get; set; }
+    public IEnumerable<ProductCategory> productCategories = new List<ProductCategory>();
+    public IEnumerable<Product> products = new List<Product>();
+
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            productCategories = await ProductCategoryService.GetProductCategories();
+            await LoadProducts(Product.ProductCategoryId);
+        }
+        catch (Exception e)
+        {
+
+            Message = "Error ... " + e.Message;
+        }
+    }
+
+    protected async Task ProductCategoryHasChanged(int productCategoryId)
+    {
+        Product.ProductCategoryId = productCategoryId;
+
+        if (Product.ProductCategoryId > 0)
+        {
+            await LoadProducts(Product.ProductCategoryId);
+        }
+
+    }
+    private async Task LoadProducts(int productCategoryId)
+    {
+        products = await ProductService.GetByCategory(productCategoryId);
+    }
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private void AddProduct()
+    {
+        MudDialog.Close(DialogResult.Ok(Product));
+    }
+}

@@ -5,11 +5,12 @@
 @inject IProductService ProductService
 @inject IClientService ClientService
 @inject IOrderService OrderService
+@inject IDialogService DialogService
 @inject NavigationManager NavigationManager
 @attribute [Authorize]
 
 <p>@Message</p>
-@if(productCategories != null && Order != null)
+@if(clients != null && Order != null)
 {
     <EditForm Model="@Order" OnValidSubmit="SaveOrder">
         <div class="card">
@@ -66,32 +67,25 @@
 
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                        </div>
+                        <div class="col-md-4 mb-3">
+
+                            <input type="button" class="btn btn-secondary" value="Add Product" @onclick="AddProduct">
+
+                        </div>
+                        <div class="col-md-4 mb-3">
+                        </div>
+                    </div>
                     </div>
                 </div>
             </div>
 
-      
 
-        <div class="col-sm-5">
-            <label>Categories</label>
-            <InputSelect class="form-control" 
-                         Value="@Order.ProductCategoryId"
-                         ValueChanged="@((int productCategoryId) => ProductCategoryHasChanged(productCategoryId))"
-                         ValueExpression="@(()=> Order.ProductCategoryId)"
-                         >
-                @foreach (var item in productCategories)
-                {
-                    <option value="@item.Id">@item.Name</option>
-                }
-            </InputSelect>
-            <label>Products</label>
-            <InputSelect class="form-control" @bind-Value="@productId">
-                @foreach (var item in products)
-                {
-                    <option value="@item.Id">@item.Name</option>
-                }
-            </InputSelect>
-        </div>
+
+
 
     </EditForm>
 }
@@ -103,12 +97,9 @@ else
 @code {
     public Order Order;
 
-    public IEnumerable<ProductCategory> productCategories;
-    public IEnumerable<Product> products;
     public IEnumerable<Client> clients;
 
     public string Message { get; set; }
-    public int productId   { get; set; } 
 
     protected override async Task OnInitializedAsync()
     {
@@ -120,8 +111,7 @@ else
                     DeliveryDate = DateTime.Today.AddDays(7)
 
             };
-            productCategories = await ProductCategoryService.GetProductCategories();
-            await LoadProducts(Order.ProductCategoryId);
+
 
             clients = await ClientService.GetAll();
         }
@@ -133,21 +123,9 @@ else
 
     }
 
-    protected async Task ProductCategoryHasChanged(int productCategoryId)
-    {
-        Order.ProductCategoryId = productCategoryId;
 
-        if(Order.ProductCategoryId > 0)
-        {
-            await LoadProducts(Order.ProductCategoryId);
-        }
 
-    }
 
-    private async Task LoadProducts(int productCategoryId)
-    {
-        products = await ProductService.GetByCategory(productCategoryId);
-    }
 
     protected async Task SaveOrder()
     {
@@ -164,5 +142,24 @@ else
     protected void Cancel()
     {
         NavigateToHome();
+    }
+
+    protected async Task AddProduct()
+    {
+        var dialog = DialogService.Show<ProductDetails>("Product Details");
+        var result = await dialog.Result;
+
+        //si el usuario no canceló el dialog, agrega el producto
+        if (!result.Cancelled)
+        {
+            var product = (Product)result.Data;
+            if(Order.Products == null)
+            {
+                Order.Products = new List<Product>();
+                Order.Products.Add(product);
+            }
+
+           
+        }
     }
 }
