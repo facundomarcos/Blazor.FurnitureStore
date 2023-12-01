@@ -99,7 +99,16 @@
                     <MudTd DataLabel="Name">@ProductContext.Name</MudTd>
                     <MudTd DataLabel="Price">@ProductContext.Price</MudTd>
                     <MudTd DataLabel="Quantity">@ProductContext.Quantity</MudTd>
-                    <MudTd DataLabel=""></MudTd>
+                    <MudTd DataLabel="">
+                        <MudFab OnClick="@(() => RemoveProduct(ProductContext.Id))"
+                                Color="Color.Secondary"  
+                                Icon="@Icons.Material.Filled.Delete"
+                                Size="Size.Small"
+                                IconSize="Size.Small"
+                                    >
+
+                        </MudFab>
+                    </MudTd>
                 </RowTemplate>
             </MudTable>
         }
@@ -177,10 +186,15 @@ else
             {
                 Order.Products = new List<Product>();
 
-                
+
             }
             Order.Products.Add(product);
-           
+
         }
+    }
+
+    protected async Task RemoveProduct(int productId)
+    {
+        Order.Products.RemoveAll(p => p.Id == productId);
     }
 }

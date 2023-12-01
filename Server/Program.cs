@@ -31,6 +31,7 @@ builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository
 builder.Services.AddScoped <IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<IOrderProductRepository, OrderProductRepository>();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
