@@ -7,5 +7,9 @@ namespace Blazor.FurnitureStore.Client.Services
         Task SaveOrder(Order order);
 
         Task<int> GetNextNumber();
+
+        Task<IEnumerable<Order>> GetAll();
+
+        Task<Order> GetDetails(int id);
     }
 }

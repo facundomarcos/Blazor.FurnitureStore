@@ -11,6 +11,7 @@ namespace Blazor.FurnitureStore.Shared
         public int Id { get; set; }
         public int OrderNumber { get; set; }
         public int ClientId { get; set; }
+        public string ClientName { get; set; }
         public DateTime OrderDate { get; set; }
         public DateTime DeliveryDate { get; set; }
         public decimal Total

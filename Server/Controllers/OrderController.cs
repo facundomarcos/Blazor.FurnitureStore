@@ -65,5 +65,31 @@ namespace Blazor.FurnitureStore.Server.Controllers
         {
             return await _orderRepository.GetNextNumber();
         }
+
+        [HttpGet]
+        public async Task<IEnumerable<Order>> Get()
+        {
+         return  await  _orderRepository.GetAll();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<Order> GetDetails(int id)
+        {
+            var order = await _orderRepository.GetDetails(id);
+
+            var products = await _orderProductRepository.GetByOrder(id);
+
+            if(order != null)
+            {
+                order.Products = products.ToList();
+            }
+            return order;
+        }
+
+        [HttpDelete("{id}")]
+        public async Task Delete(int id)
+        {
+            await _orderRepository.DeleteOrder(id);
+        }
     }
 }

@@ -1,5 +1,5 @@
 ﻿@page "/orderDetails"
-
+@page "/orderDetails/{id:int}"
 
 @inject IProductCategoryService ProductCategoryService
 @inject IProductService ProductService
@@ -129,17 +129,29 @@ else
 
     public string Message { get; set; }
 
+    [Parameter] public int id { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            Order = new Order() {
-                    OrderNumber = await OrderService.GetNextNumber(),
-                    ProductCategoryId = 1,
-                    OrderDate = DateTime.Today,
-                    DeliveryDate = DateTime.Today.AddDays(7)
+            if (id > 0)
+            {
+                Order = await OrderService.GetDetails(id);
+            }
+            else
+            {
+                Order = new Order()
+                    {
+                        OrderNumber = await OrderService.GetNextNumber(),
+                        ProductCategoryId = 1,
+                        OrderDate = DateTime.Today,
+                        DeliveryDate = DateTime.Today.AddDays(7)
 
-            };
+                    };
+            }
+
+
 
 
             clients = await ClientService.GetAll();
